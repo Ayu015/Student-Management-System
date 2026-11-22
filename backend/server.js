@@ -82,6 +82,31 @@ app.put("/students/:id", (req, res) => {
     });
 });
 
+    app.delete("/students/:id", (req, res) => {
+    const { id } = req.params;
+
+    const sql = "DELETE FROM students WHERE id = ?";
+
+    db.query(sql, [id], (error, results) => {
+        if (error) {
+            return res.status(500).json({
+                message: "Error deleting student",
+                error: error.message
+            });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({
+                message: "Student not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Student deleted successfully!"
+        });
+    });
+});
+
     app.listen(5000, () => {
         console.log("Server is running on port 5000");
     });

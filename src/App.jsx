@@ -95,6 +95,25 @@ function App() {
     });
   }
 
+  async function handleDelete(id) {
+    try {
+      const response = await fetch(`http://localhost:5000/students/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Student deleted successfully!");
+        await fetchStudents();
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.log("Delete Error:", error);
+    }
+  }
+
   return (
     <div className="bg-gray-100 ">
       <div className="min-h-screen bg-gray-100 flex justify-center items-center p-5">
@@ -190,12 +209,18 @@ function App() {
                 <td className="border p-2">{item.email}</td>
                 <td className="border p-2">{item.mobile}</td>
                 <td className="border p-2">{item.course}</td>
-                <td className="border p-2">
+                <td className="border p-2 flex">
                   <button
                     onClick={() => handleEdit(item)}
                     className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-700"
                   >
                     Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 ml-2"
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
